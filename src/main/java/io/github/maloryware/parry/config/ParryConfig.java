@@ -1,10 +1,11 @@
-package io.github.foundationgames.parry.config;
-
+package io.github.maloryware.parry.config;
+import QuiltLoader
 import com.google.gson.Gson;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.Registries;
+import org.quiltmc.loader.api.QuiltLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +17,7 @@ public class ParryConfig {
     public OverrideValue[] overrides = new OverrideValue[] {};
 
     public static ParryConfig load() throws IOException {
-        var configFile = FabricLoader.getInstance().getConfigDir().resolve("parry.json");
+        var configFile = QuiltLoader.getConfigDir().resolve("parry.json");
         var gson = new Gson();
         if (!Files.exists(configFile)) {
             save(new ParryConfig());
@@ -25,7 +26,7 @@ public class ParryConfig {
     }
 
     public static void save(ParryConfig config) throws IOException {
-        var configFile = FabricLoader.getInstance().getConfigDir().resolve("parry.json");
+        var configFile = QuiltLoader.getConfigDir().resolve("parry.json");
         var gson = new Gson();
         var writer = gson.newJsonWriter(Files.newBufferedWriter(configFile));
         writer.setIndent("    ");

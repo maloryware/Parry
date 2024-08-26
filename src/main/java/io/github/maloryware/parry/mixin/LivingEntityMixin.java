@@ -1,7 +1,7 @@
-package io.github.foundationgames.parry.mixin;
+package io.github.maloryware.parry.mixin;
 
-import io.github.foundationgames.parry.Parry;
-import io.github.foundationgames.parry.config.ParryConfig;
+import io.github.maloryware.parry.Parry;
+import io.github.maloryware.parry.config.ParryConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
