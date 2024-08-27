@@ -6,10 +6,10 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
-public class ModelPredicateProvider {
+public class PredicateProvider {
 	public static void register(){
 
-		Registries.ITEM.forEach(ModelPredicateProvider::registerParriableItems);
+		Registries.ITEM.forEach(PredicateProvider::registerParriableItems);
 
 	}
 

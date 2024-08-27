@@ -1,7 +1,7 @@
 package io.github.maloryware.parry.mixin;
 
-import io.github.maloryware.parry.Parry;
-import io.github.maloryware.parry.config.ParryConfig;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import io.github.maloryware.parry.config.ParryConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -11,9 +11,9 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
@@ -23,37 +23,35 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow public abstract boolean isUsingItem();
     @Shadow public abstract boolean blockedByShield(DamageSource source);
 
-    private DamageSource parry$cachedSource;
-    private boolean parry$appearBlocking = false;
+	@Shadow
+	protected int itemUseTimeLeft;
+	@Unique private DamageSource cachedSource = null;
+    @Unique private boolean appearBlocking = false;
 
     @Inject(at = @At(value = "HEAD"), method = "isBlocking", cancellable = true)
-    public void parry$fakeShieldBlocking(CallbackInfoReturnable<Boolean> cir) {
+    public void swordBlocking(CallbackInfoReturnable<Boolean> cir) {
         var item = this.activeItemStack.getItem();
         if(item instanceof SwordItem) {
-            cir.setReturnValue(parry$appearBlocking);
+			appearBlocking = true;
+            cir.setReturnValue(true);
         }
     }
 
-    @Inject(at = @At(value = "HEAD"), method = "damage", cancellable = true)
-    public void parry$cacheDamageSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        this.parry$cachedSource = source;
+    @Inject(at = @At(value = "HEAD"), method = "damage")
+    public void cacheDamageSource(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.cachedSource = source;
     }
 
-    @ModifyVariable(method = "damage", at = @At("HEAD"), index = 2)
-    private float parry$applySwordBlockProtection(float old) {
+
+    @ModifyReturnValue(at = @At(value = "RETURN"), method = "damage")
+    private boolean applySwordBlockProtection(boolean original)  {
         var item = this.activeItemStack.getItem();
-        parry$appearBlocking = true;
-        if(item instanceof SwordItem && this.isUsingItem() && this.blockedByShield(parry$cachedSource)) {
-            var cfg = Parry.getConfig();
-            double multiplier = cfg.default_multiplier;
-            for(ParryConfig.OverrideValue v : cfg.overrides) {
-                if(item == v.getItem()) multiplier = v.multiplier;
-            }
-            System.out.println(old +" into "+old * multiplier);
-            old *= multiplier;
-        }
-        parry$appearBlocking = false;
-        return old;
+		boolean apply;
+        appearBlocking = true;
+        apply = item instanceof SwordItem && this.isUsingItem() && this.blockedByShield(cachedSource);
+		appearBlocking = false;
+		this.itemUseTimeLeft = this.activeItemStack.getMaxUseTime();
+		return original & !apply;
     }
 
     public LivingEntityMixin(EntityType<?> type, World world) {
