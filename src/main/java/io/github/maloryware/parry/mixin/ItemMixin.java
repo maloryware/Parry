@@ -1,7 +1,5 @@
 package io.github.maloryware.parry.mixin;
 
-import io.github.maloryware.parry.Parry;
-import io.github.maloryware.parry.config.ParryConstants;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,13 +10,15 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
+
+
 public class ItemMixin {
+
 
     @Inject(at = @At(value = "HEAD"), method = "use", cancellable = true)
     public void allowSwordUse(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
@@ -31,11 +31,11 @@ public class ItemMixin {
 
             user.setCurrentHand(hand);
             user.setSprinting(false);
-			if (user.getItemCooldownManager().isCoolingDown(stack.getItem())) {
-				cir.setReturnValue(TypedActionResult.fail(stack));
+			if (!(((ExtraClutter) user).parry$canParry())) {
+				cir.setReturnValue(TypedActionResult.consume(stack));
 			}
 			else {
-				cir.setReturnValue(TypedActionResult.consume(stack));
+				cir.setReturnValue(TypedActionResult.pass(stack));
 				if(user.getItemUseTimeLeft() <= 0 & !user.getItemCooldownManager().isCoolingDown(stack.getItem())){
 					user.getItemCooldownManager().set(stack.getItem(), 20);
 				}
@@ -47,7 +47,7 @@ public class ItemMixin {
     @Inject(at = @At(value = "HEAD"), method = "getMaxUseTime", cancellable = true)
     public void applySwordUseTime(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if(stack.getItem() instanceof SwordItem) {
-            cir.setReturnValue(20);
+            cir.setReturnValue(0);
         }
     }
 
@@ -57,4 +57,5 @@ public class ItemMixin {
             cir.setReturnValue(UseAction.BLOCK);
         }
     }
+
 }
