@@ -1,5 +1,6 @@
 package io.github.maloryware.parry.mixin;
 
+import io.github.maloryware.parry.ExtraClutter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

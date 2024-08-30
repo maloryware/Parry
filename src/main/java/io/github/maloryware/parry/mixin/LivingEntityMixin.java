@@ -2,6 +2,7 @@ package io.github.maloryware.parry.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import io.github.maloryware.parry.ExtraClutter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(LivingEntity.class)
-public abstract class LivingEntityMixin extends Entity implements ExtraClutter{
+public abstract class LivingEntityMixin extends Entity implements ExtraClutter {
 
 
 

@@ -1,4 +1,4 @@
-package io.github.maloryware.parry.mixin;
+package io.github.maloryware.parry;
 
 public interface ExtraClutter {
 
