@@ -48,7 +48,7 @@ public class ItemMixin {
     @Inject(at = @At(value = "HEAD"), method = "getMaxUseTime", cancellable = true)
     public void applySwordUseTime(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if(stack.getItem() instanceof SwordItem) {
-            cir.setReturnValue(0);
+            cir.setReturnValue(20);
         }
     }
 
