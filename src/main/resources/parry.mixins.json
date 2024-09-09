@@ -4,10 +4,13 @@
   "package": "io.github.maloryware.parry.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "DamageCacheEntityMixin",
     "ItemMixin",
-    "LivingEntityMixin"
+    "ServerPlayerEntityMixin"
   ],
-  "client": [],
+  "client": [
+    "RedirectToMyTitleScreenMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

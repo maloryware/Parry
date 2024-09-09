@@ -17,7 +17,7 @@ public class PredicateProvider {
 
 		if (item instanceof SwordItem) {
 			ModelPredicateProviderRegistry.register(item, new Identifier("parrying"),
-				((itemStack, clientWorld, livingEntity, i) ->
+				((itemStack, a, livingEntity, b) ->
                     livingEntity != null
 						&& livingEntity.getActiveItem() == itemStack
                         && livingEntity.isUsingItem() ? 1.0F : 0.0F

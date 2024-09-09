@@ -4,5 +4,6 @@ public interface ExtraClutter {
 
 	boolean parry$canParry();
 
+	int parry$timeMod();
 
 }
