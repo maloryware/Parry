@@ -9,7 +9,7 @@
     "ServerPlayerEntityMixin"
   ],
   "client": [
-    "RedirectToMyTitleScreenMixin"
+    "HudDebugValuesMixin"
   ],
   "injectors": {
     "defaultRequire": 1
